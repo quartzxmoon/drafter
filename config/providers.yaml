@@ -1,0 +1,237 @@
+# Provider Configuration for PA eDocket Desktop
+# Production endpoints and settings for court data providers
+
+providers:
+  # PA Unified Judicial System Web Portal
+  ujs_portal:
+    name: "PA UJS Web Portal"
+    enabled: true
+    base_url: "https://ujsportal.pacourts.us"
+    
+    # Rate limiting
+    rate_limit:
+      requests_per_minute: 30
+      requests_per_hour: 1000
+      burst_limit: 5
+      
+    # Retry configuration
+    retry:
+      max_attempts: 3
+      backoff_multiplier: 2
+      initial_delay_ms: 1000
+      max_delay_ms: 30000
+      
+    # Endpoints
+    endpoints:
+      search: "/Report/CpDocketSheet"
+      docket_detail: "/Report/CpDocketSheet"
+      case_search: "/Report/CpSearch"
+      
+    # Request headers
+    headers:
+      User-Agent: "PA-eDocket-Desktop/1.0"
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      Accept-Language: "en-US,en;q=0.5"
+      
+    # Caching
+    cache:
+      ttl_seconds: 3600
+      max_entries: 10000
+      
+  # PACFile E-filing System
+  pacfile:
+    name: "PACFile E-filing"
+    enabled: true
+    base_url: "https://pacfile.pacourts.us"
+    
+    rate_limit:
+      requests_per_minute: 20
+      requests_per_hour: 500
+      burst_limit: 3
+      
+    retry:
+      max_attempts: 3
+      backoff_multiplier: 2
+      initial_delay_ms: 2000
+      max_delay_ms: 60000
+      
+    endpoints:
+      login: "/api/auth/login"
+      capabilities: "/api/courts/capabilities"
+      file_case: "/api/filing/submit"
+      status: "/api/filing/status"
+      fees: "/api/filing/fees"
+      
+    auth:
+      type: "oauth2"
+      token_endpoint: "/api/auth/token"
+      refresh_endpoint: "/api/auth/refresh"
+      scope: "filing read"
+      
+    headers:
+      User-Agent: "PA-eDocket-Desktop/1.0"
+      Accept: "application/json"
+      Content-Type: "application/json"
+      
+    cache:
+      ttl_seconds: 1800
+      max_entries: 5000
+      
+  # County E-filing Systems
+  county_efiling:
+    name: "County E-filing Systems"
+    enabled: true
+    
+    # Philadelphia County
+    philadelphia:
+      name: "Philadelphia FJD E-file"
+      base_url: "https://fjdefile.phila.gov"
+      
+      rate_limit:
+        requests_per_minute: 15
+        requests_per_hour: 300
+        burst_limit: 2
+        
+      auth:
+        type: "oauth2"
+        client_id_env: "PHILA_EFILING_CLIENT_ID"
+        client_secret_env: "PHILA_EFILING_CLIENT_SECRET"
+        
+      endpoints:
+        login: "/oauth/token"
+        submit: "/api/v1/filing"
+        status: "/api/v1/filing/status"
+        
+    # Allegheny County
+    allegheny:
+      name: "Allegheny County E-filing"
+      base_url: "https://efiling.alleghenycourts.us"
+      
+      rate_limit:
+        requests_per_minute: 10
+        requests_per_hour: 200
+        burst_limit: 2
+        
+      auth:
+        type: "basic"
+        username_env: "ALLEGHENY_EFILING_USERNAME"
+        password_env: "ALLEGHENY_EFILING_PASSWORD"
+        
+      endpoints:
+        submit: "/api/filing"
+        status: "/api/filing/status"
+        
+  # C-Track Civil Case Management
+  ctrack:
+    name: "C-Track Civil Cases"
+    enabled: true
+    
+    # Montgomery County
+    montgomery:
+      name: "Montgomery County C-Track"
+      base_url: "https://ctrack.montcopa.org"
+      
+      rate_limit:
+        requests_per_minute: 20
+        requests_per_hour: 400
+        burst_limit: 3
+        
+      endpoints:
+        search: "/api/cases/search"
+        detail: "/api/cases/detail"
+        
+      auth:
+        type: "api_key"
+        key_env: "MONTGOMERY_CTRACK_API_KEY"
+        
+    # Chester County
+    chester:
+      name: "Chester County C-Track"
+      base_url: "https://ctrack.chesco.org"
+      
+      rate_limit:
+        requests_per_minute: 15
+        requests_per_hour: 300
+        burst_limit: 2
+        
+      endpoints:
+        search: "/api/v2/cases/search"
+        detail: "/api/v2/cases/detail"
+        
+      auth:
+        type: "api_key"
+        key_env: "CHESTER_CTRACK_API_KEY"
+        
+  # External Legal Data Sources
+  courtlistener:
+    name: "CourtListener API"
+    enabled: true
+    base_url: "https://www.courtlistener.com/api/rest/v3"
+    
+    rate_limit:
+      requests_per_minute: 100
+      requests_per_hour: 5000
+      burst_limit: 10
+      
+    auth:
+      type: "token"
+      token_env: "COURTLISTENER_API_TOKEN"
+      
+    endpoints:
+      opinions: "/opinions/"
+      dockets: "/dockets/"
+      courts: "/courts/"
+      
+    headers:
+      User-Agent: "PA-eDocket-Desktop/1.0"
+      Accept: "application/json"
+      
+  govinfo:
+    name: "GovInfo API"
+    enabled: true
+    base_url: "https://api.govinfo.gov"
+    
+    rate_limit:
+      requests_per_minute: 100
+      requests_per_hour: 1000
+      burst_limit: 10
+      
+    auth:
+      type: "api_key"
+      key_env: "GOVINFO_API_KEY"
+      
+    endpoints:
+      collections: "/collections"
+      packages: "/packages"
+      
+    headers:
+      User-Agent: "PA-eDocket-Desktop/1.0"
+      Accept: "application/json"
+
+# Global settings
+global:
+  # Default timeout for all requests
+  timeout_seconds: 30
+  
+  # Connection pool settings
+  connection_pool:
+    max_connections: 100
+    max_idle_connections: 10
+    idle_timeout_seconds: 300
+    
+  # SSL/TLS settings
+  tls:
+    verify_certificates: true
+    min_tls_version: "1.2"
+    
+  # Logging
+  logging:
+    level: "info"
+    structured: true
+    redact_pii: true
+    
+  # Error handling
+  error_handling:
+    max_retries: 3
+    circuit_breaker_threshold: 10
+    circuit_breaker_timeout_seconds: 60

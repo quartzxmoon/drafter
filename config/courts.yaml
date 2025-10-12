@@ -1,0 +1,260 @@
+# PA Courts Configuration
+# Production-ready court metadata for PA eDocket Desktop
+
+courts:
+  # Magisterial District Courts
+  mdj:
+    name: "Magisterial District Courts"
+    level: "MDJ"
+    jurisdiction: "Pennsylvania"
+    
+    # Document formatting rules
+    formatting:
+      margins:
+        top: "1.0in"
+        bottom: "1.0in"
+        left: "1.0in"
+        right: "1.0in"
+      font:
+        family: "Times New Roman"
+        size: "12pt"
+        line_spacing: "double"
+      
+      # Caption requirements
+      caption:
+        format: "standard_pa"
+        include_docket: true
+        include_court: true
+        include_county: true
+        include_judge: false
+      
+      # Signature block
+      signature:
+        attorney_name: true
+        attorney_id: true
+        firm_name: true
+        address: true
+        phone: true
+        email: true
+        
+      # Service certificate
+      service_certificate: true
+      page_limits:
+        motion: 10
+        brief: 25
+        petition: 15
+    
+    # E-filing capabilities (where available)
+    efiling:
+      enabled: false
+      provider: null
+      endpoint: null
+      
+  # Court of Common Pleas
+  cp:
+    name: "Court of Common Pleas"
+    level: "CP"
+    jurisdiction: "Pennsylvania"
+    
+    formatting:
+      margins:
+        top: "1.0in"
+        bottom: "1.0in"
+        left: "1.0in"
+        right: "1.0in"
+      font:
+        family: "Times New Roman"
+        size: "12pt"
+        line_spacing: "double"
+      
+      caption:
+        format: "standard_pa"
+        include_docket: true
+        include_court: true
+        include_county: true
+        include_judge: true
+        include_division: true
+      
+      signature:
+        attorney_name: true
+        attorney_id: true
+        firm_name: true
+        address: true
+        phone: true
+        email: true
+        
+      service_certificate: true
+      page_limits:
+        motion: 20
+        brief: 35
+        petition: 25
+        complaint: 50
+    
+    efiling:
+      enabled: true
+      provider: "pacfile"
+      endpoint: "https://pacfile.pacourts.us"
+      
+  # Superior Court
+  superior:
+    name: "Superior Court of Pennsylvania"
+    level: "APP"
+    jurisdiction: "Pennsylvania"
+    
+    formatting:
+      margins:
+        top: "1.0in"
+        bottom: "1.0in"
+        left: "1.5in"
+        right: "1.0in"
+      font:
+        family: "Times New Roman"
+        size: "12pt"
+        line_spacing: "double"
+      
+      caption:
+        format: "appellate_pa"
+        include_docket: true
+        include_court: true
+        include_lower_court: true
+        include_judge: false
+      
+      signature:
+        attorney_name: true
+        attorney_id: true
+        firm_name: true
+        address: true
+        phone: true
+        email: true
+        
+      service_certificate: true
+      table_of_contents: true
+      table_of_authorities: true
+      page_limits:
+        brief: 65
+        petition: 20
+        motion: 10
+    
+    efiling:
+      enabled: true
+      provider: "pacfile"
+      endpoint: "https://pacfile.pacourts.us"
+      
+  # Supreme Court
+  supreme:
+    name: "Supreme Court of Pennsylvania"
+    level: "APP"
+    jurisdiction: "Pennsylvania"
+    
+    formatting:
+      margins:
+        top: "1.0in"
+        bottom: "1.0in"
+        left: "1.5in"
+        right: "1.0in"
+      font:
+        family: "Times New Roman"
+        size: "12pt"
+        line_spacing: "double"
+      
+      caption:
+        format: "appellate_pa"
+        include_docket: true
+        include_court: true
+        include_lower_court: true
+        include_judge: false
+      
+      signature:
+        attorney_name: true
+        attorney_id: true
+        firm_name: true
+        address: true
+        phone: true
+        email: true
+        
+      service_certificate: true
+      table_of_contents: true
+      table_of_authorities: true
+      page_limits:
+        brief: 65
+        petition: 20
+        motion: 10
+    
+    efiling:
+      enabled: true
+      provider: "pacfile"
+      endpoint: "https://pacfile.pacourts.us"
+
+# County-specific configurations
+counties:
+  philadelphia:
+    name: "Philadelphia County"
+    cp_court_id: "51"
+    
+    # Philadelphia-specific e-filing
+    efiling:
+      enabled: true
+      provider: "county_efiling"
+      endpoint: "https://fjdefile.phila.gov"
+      auth_type: "oauth2"
+      
+    # Local rules variations
+    local_rules:
+      cover_sheet_required: true
+      electronic_service: true
+      
+  allegheny:
+    name: "Allegheny County"
+    cp_court_id: "02"
+    
+    efiling:
+      enabled: true
+      provider: "county_efiling"
+      endpoint: "https://efiling.alleghenycourts.us"
+      auth_type: "basic"
+      
+    local_rules:
+      cover_sheet_required: false
+      electronic_service: true
+
+# Document templates metadata
+templates:
+  motion_to_dismiss:
+    name: "Motion to Dismiss"
+    category: "motion"
+    courts: ["cp", "superior", "supreme"]
+    variables:
+      - name: "grounds"
+        type: "select"
+        options: ["12(b)(1)", "12(b)(6)", "12(b)(7)"]
+        required: true
+      - name: "supporting_facts"
+        type: "textarea"
+        required: true
+        
+  complaint:
+    name: "Complaint"
+    category: "pleading"
+    courts: ["cp"]
+    variables:
+      - name: "cause_of_action"
+        type: "text"
+        required: true
+      - name: "damages_sought"
+        type: "currency"
+        required: false
+        
+  appeal_brief:
+    name: "Appellate Brief"
+    category: "brief"
+    courts: ["superior", "supreme"]
+    variables:
+      - name: "issues_presented"
+        type: "textarea"
+        required: true
+      - name: "statement_of_case"
+        type: "textarea"
+        required: true
+      - name: "argument"
+        type: "textarea"
+        required: true

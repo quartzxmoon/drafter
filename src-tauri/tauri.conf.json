@@ -1,0 +1,118 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "PA eDocket Desktop",
+  "version": "0.1.0",
+  "identifier": "com.paedocket.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "PA eDocket Desktop",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "alwaysOnTop": false,
+        "skipTaskbar": false,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' tauri:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://ujsportal.pacourts.us https://www.pacourts.us https://api.courtlistener.com https://api.govinfo.gov wss://localhost:* ws://localhost:*"
+    },
+    "trayIcon": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true,
+      "menuOnLeftClick": false
+    }
+  },
+  "updater": {
+    "active": true,
+    "endpoints": [
+      "https://github.com/quartzxmoon/drafter/releases/latest/download/release.json"
+    ],
+    "dialog": true,
+    "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhEQzY4M0Y5RkY4NjUzNzMKUldSVGJHVnVkR2x1WlhOcGJuZGxjblJsY25SbGNuUmxjblJsY25SbGNuUmxjblJsY25SbGNuUmwK"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "identifier": "com.paedocket.desktop",
+    "publisher": "PA eDocket Desktop Team",
+    "copyright": "Copyright © 2024 PA eDocket Desktop Team. All rights reserved.",
+    "category": "Productivity",
+    "shortDescription": "Pennsylvania court docket search and document management",
+    "longDescription": "PA eDocket Desktop is a comprehensive desktop application for searching Pennsylvania court dockets, managing case information, generating legal documents, and handling e-filing workflows.",
+    "externalBin": [],
+    "resources": [
+      "config/*",
+      "templates/*"
+    ],
+    "deb": {
+      "depends": [
+        "libwebkit2gtk-4.0-37",
+        "libappindicator3-1"
+      ],
+      "section": "Office"
+    },
+    "macOS": {
+      "frameworks": [],
+      "minimumSystemVersion": "10.13",
+      "exceptionDomain": "",
+      "signingIdentity": null,
+      "providerShortName": null,
+      "entitlements": null
+    },
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "tsp": false,
+      "wix": {
+        "language": "en-US",
+        "template": null,
+        "fragmentPaths": [],
+        "componentGroupRefs": [],
+        "componentRefs": [],
+        "featureGroupRefs": [],
+        "featureRefs": [],
+        "mergeRefs": [],
+        "skipWebviewInstall": false,
+        "license": null,
+        "enableElevatedUpdateTask": true,
+        "bannerPath": null,
+        "dialogImagePath": null
+      },
+      "nsis": {
+        "template": null,
+        "languages": ["English"],
+        "customLanguageFiles": {},
+        "displayLanguageSelector": false,
+        "installerIcon": null,
+        "installMode": "currentUser",
+        "allowDowngrades": false,
+        "deleteAppDataOnUninstall": false,
+        "startMenuFolder": "PA eDocket Desktop",
+        "headerImage": null,
+        "sidebarImage": null,
+        "installerHooks": null,
+        "compressionLevel": "high"
+      }
+    }
+  }
+}

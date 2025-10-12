@@ -1,0 +1,213 @@
+# Automation and batch processing jobs configuration for PA eDocket Desktop
+
+jobs:
+  # Docket monitoring jobs
+  watchlist_monitor:
+    name: "Watchlist Monitor"
+    description: "Monitor watchlisted dockets for updates"
+    enabled: true
+    schedule: "0 */6 * * *"  # Every 6 hours
+    type: "recurring"
+    priority: "high"
+    timeout_minutes: 30
+    retry:
+      max_attempts: 3
+      backoff_multiplier: 2.0
+      initial_delay_seconds: 60
+    config:
+      batch_size: 10
+      parallel_requests: 3
+      update_threshold_hours: 24
+      notification_enabled: true
+      notification_types: ["new_filings", "status_changes", "hearings"]
+
+  # Cache maintenance jobs
+  cache_cleanup:
+    name: "Cache Cleanup"
+    description: "Clean up expired cache entries and optimize database"
+    enabled: true
+    schedule: "0 2 * * *"  # Daily at 2 AM
+    type: "recurring"
+    priority: "low"
+    timeout_minutes: 15
+    retry:
+      max_attempts: 2
+      backoff_multiplier: 1.5
+      initial_delay_seconds: 30
+    config:
+      vacuum_database: true
+      cleanup_temp_files: true
+      max_cache_age_days: 30
+      max_export_history_days: 90
+
+  # Data synchronization jobs
+  provider_sync:
+    name: "Provider Data Sync"
+    description: "Synchronize data from external providers"
+    enabled: true
+    schedule: "0 1 * * *"  # Daily at 1 AM
+    type: "recurring"
+    priority: "medium"
+    timeout_minutes: 60
+    retry:
+      max_attempts: 3
+      backoff_multiplier: 2.0
+      initial_delay_seconds: 120
+    config:
+      providers: ["ujs_portal", "courtlistener", "govinfo"]
+      sync_court_rules: true
+      sync_templates: true
+      sync_provider_configs: true
+
+  # Automated document processing
+  document_processor:
+    name: "Document Processor"
+    description: "Process queued document generation and export tasks"
+    enabled: true
+    schedule: "*/15 * * * *"  # Every 15 minutes
+    type: "recurring"
+    priority: "medium"
+    timeout_minutes: 10
+    retry:
+      max_attempts: 2
+      backoff_multiplier: 1.5
+      initial_delay_seconds: 30
+    config:
+      batch_size: 5
+      output_formats: ["pdf", "docx"]
+      auto_export: true
+      cleanup_temp_files: true
+
+  # E-filing status monitoring
+  efiling_monitor:
+    name: "E-filing Status Monitor"
+    description: "Monitor e-filing submissions for status updates"
+    enabled: true
+    schedule: "*/30 * * * *"  # Every 30 minutes
+    type: "recurring"
+    priority: "high"
+    timeout_minutes: 20
+    retry:
+      max_attempts: 3
+      backoff_multiplier: 2.0
+      initial_delay_seconds: 60
+    config:
+      check_pending_submissions: true
+      notification_enabled: true
+      auto_retry_failed: true
+      max_retry_attempts: 3
+
+  # System health monitoring
+  health_check:
+    name: "System Health Check"
+    description: "Monitor system health and performance metrics"
+    enabled: true
+    schedule: "*/5 * * * *"  # Every 5 minutes
+    type: "recurring"
+    priority: "low"
+    timeout_minutes: 5
+    retry:
+      max_attempts: 1
+      backoff_multiplier: 1.0
+      initial_delay_seconds: 10
+    config:
+      check_database: true
+      check_providers: true
+      check_disk_space: true
+      check_memory_usage: true
+      alert_thresholds:
+        disk_usage_percent: 90
+        memory_usage_percent: 85
+        database_size_mb: 1000
+
+# Global job configuration
+global:
+  # Job execution settings
+  execution:
+    max_concurrent_jobs: 5
+    job_timeout_minutes: 120
+    cleanup_completed_jobs_hours: 24
+    cleanup_failed_jobs_hours: 168  # 1 week
+
+  # Logging and monitoring
+  logging:
+    level: "info"
+    log_job_start: true
+    log_job_completion: true
+    log_job_errors: true
+    structured_logging: true
+
+  # Error handling
+  error_handling:
+    max_consecutive_failures: 5
+    disable_job_on_failure: true
+    notification_on_failure: true
+    retry_exponential_backoff: true
+
+  # Performance settings
+  performance:
+    thread_pool_size: 4
+    queue_size: 100
+    batch_processing: true
+    rate_limiting: true
+
+# Job queues configuration
+queues:
+  high_priority:
+    name: "High Priority Queue"
+    max_size: 50
+    workers: 3
+    retry_policy: "exponential"
+    
+  medium_priority:
+    name: "Medium Priority Queue"
+    max_size: 100
+    workers: 2
+    retry_policy: "linear"
+    
+  low_priority:
+    name: "Low Priority Queue"
+    max_size: 200
+    workers: 1
+    retry_policy: "fixed"
+
+# Notification settings
+notifications:
+  enabled: true
+  channels:
+    - type: "system"
+      enabled: true
+      config:
+        show_success: false
+        show_errors: true
+        show_warnings: true
+    
+    - type: "email"
+      enabled: false
+      config:
+        smtp_server: ""
+        smtp_port: 587
+        username: ""
+        password: ""
+        from_address: ""
+        to_addresses: []
+
+# Monitoring and metrics
+monitoring:
+  enabled: true
+  metrics:
+    job_execution_time: true
+    job_success_rate: true
+    queue_size: true
+    system_resources: true
+  
+  retention:
+    metrics_retention_days: 30
+    logs_retention_days: 7
+    
+  alerts:
+    enabled: true
+    thresholds:
+      job_failure_rate_percent: 20
+      queue_backlog_size: 50
+      average_execution_time_minutes: 30

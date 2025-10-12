@@ -1,0 +1,77 @@
+# PA eDocket Desktop API Server Dockerfile
+# Multi-stage build for production optimization
+
+# Build stage
+FROM node:18-alpine AS builder
+
+# Install system dependencies for PDF processing
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    poppler-utils \
+    tesseract-ocr \
+    tesseract-ocr-data-eng \
+    imagemagick \
+    ghostscript
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY scripts/ ./scripts/
+COPY migrations/ ./migrations/
+COPY config/ ./config/
+COPY templates/ ./templates/
+
+# Production stage
+FROM node:18-alpine AS production
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    poppler-utils \
+    tesseract-ocr \
+    tesseract-ocr-data-eng \
+    imagemagick \
+    ghostscript \
+    curl \
+    dumb-init
+
+# Create app user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+WORKDIR /app
+
+# Copy from builder stage
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/scripts ./scripts
+COPY --from=builder --chown=nodejs:nodejs /app/migrations ./migrations
+COPY --from=builder --chown=nodejs:nodejs /app/config ./config
+COPY --from=builder --chown=nodejs:nodejs /app/templates ./templates
+COPY --chown=nodejs:nodejs package*.json ./
+
+# Create required directories
+RUN mkdir -p data logs uploads temp && \
+    chown -R nodejs:nodejs data logs uploads temp
+
+# Switch to non-root user
+USER nodejs
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/health || exit 1
+
+# Expose ports
+EXPOSE 3000 9090
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the API server
+CMD ["node", "scripts/api-server.js"]

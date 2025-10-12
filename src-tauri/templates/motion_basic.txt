@@ -1,0 +1,45 @@
+{{case_caption}}
+
+Docket No. {{docket_number}}
+
+{{motion_title}}
+
+TO THE HONORABLE COURT:
+
+NOW COMES {{movant_name}}, by and through undersigned counsel, and respectfully moves this Honorable Court as follows:
+
+1. BACKGROUND
+
+[Insert factual background here]
+
+2. LEGAL STANDARD
+
+[Insert applicable legal standard]
+
+3. ARGUMENT
+
+[Insert legal argument supporting the motion]
+
+4. CONCLUSION
+
+WHEREFORE, {{movant_name}} respectfully requests that this Honorable Court grant this {{motion_title}} and award such other relief as this Court deems just and proper.
+
+{{#if electronic_service}}
+CERTIFICATE OF SERVICE
+
+I hereby certify that a true and correct copy of the foregoing document was served electronically upon all counsel of record through the Pennsylvania Electronic Filing System on {{current_date}}.
+{{/if}}
+
+Respectfully submitted,
+
+_________________________
+{{attorney_name}}
+Attorney for {{movant_name}}
+PA Attorney ID No. {{attorney_id}}
+[Firm Name]
+[Address]
+[City, State ZIP]
+[Phone]
+[Email]
+
+Date: {{current_date}}
