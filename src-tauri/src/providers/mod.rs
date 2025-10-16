@@ -7,6 +7,8 @@ pub mod county_efiling;
 pub mod ctrack;
 pub mod rate_limiter;
 pub mod client;
+pub mod courtlistener;
+pub mod govinfo;
 
 // Common provider traits and types
 use crate::domain::*;

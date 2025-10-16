@@ -47,6 +47,14 @@ urlencoding = "2.1"
 async-trait = "0.1"
 scraper = "0.20"
 
+# REST API dependencies
+axum = { version = "0.7", features = ["json", "ws"] }
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+hyper = { version = "1.0", features = ["full"] }
+
+# PDF generation for demand letters
+printpdf = "0.7"
+
 [dev-dependencies]
 tokio-test = "0.4"
 tempfile = "3.8"

@@ -1,0 +1,426 @@
+# Comprehensive Pennsylvania Legal Document Templates
+# Pro Se Friendly with Auto-Population from Case Data
+
+templates:
+  # ============================================================================
+  # MOTIONS
+  # ============================================================================
+
+  - id: motion_summary_judgment
+    name: Motion for Summary Judgment
+    category: motion
+    document_type: motion
+    court_types: [CP, APP]
+    matter_types: [civil, business]
+    is_pro_se_friendly: false
+    description: Motion requesting judgment without trial based on undisputed facts
+    auto_populate_rules:
+      case_caption: "{{client_name}} v. {{opposing_party}}"
+      docket_number: "{{docket_number}}"
+      court_name: "{{court_name}}"
+      county: "{{county}}"
+    variable_schema:
+      - name: movant_name
+        type: text
+        required: true
+        description: Name of moving party
+      - name: legal_standard
+        type: textarea
+        required: true
+        description: Applicable legal standard for summary judgment
+      - name: undisputed_facts
+        type: textarea
+        required: true
+        description: Statement of undisputed material facts
+      - name: argument
+        type: textarea
+        required: true
+        description: Legal argument supporting motion
+    content: |
+      IN THE COURT OF COMMON PLEAS OF {{county}} COUNTY, PENNSYLVANIA
+
+      {{case_caption}}
+
+      No. {{docket_number}}
+
+      MOTION FOR SUMMARY JUDGMENT
+
+      NOW COMES {{movant_name}}, by and through undersigned counsel, and respectfully moves this Honorable Court for the entry of summary judgment in favor of {{movant_name}} pursuant to Pa.R.C.P. 1035.2, and in support thereof, states as follows:
+
+      I. LEGAL STANDARD
+
+      {{legal_standard}}
+
+      II. STATEMENT OF UNDISPUTED MATERIAL FACTS
+
+      {{undisputed_facts}}
+
+      III. ARGUMENT
+
+      {{argument}}
+
+      IV. CONCLUSION
+
+      For the foregoing reasons, {{movant_name}} respectfully requests that this Honorable Court grant this Motion for Summary Judgment.
+
+      Respectfully submitted,
+
+      {{attorney_signature}}
+
+  - id: motion_to_compel
+    name: Motion to Compel Discovery
+    category: motion
+    document_type: motion
+    court_types: [CP]
+    matter_types: [civil, business, family]
+    is_pro_se_friendly: true
+    description: Motion to compel responses to discovery requests
+    content: |
+      # Motion to Compel template content here...
+
+  - id: motion_continuance
+    name: Motion for Continuance
+    category: motion
+    document_type: motion
+    court_types: [CP, MDJ]
+    matter_types: [all]
+    is_pro_se_friendly: true
+    description: Motion requesting postponement of hearing or trial
+    content: |
+      # Motion for Continuance template...
+
+  # ============================================================================
+  # PLEADINGS
+  # ============================================================================
+
+  - id: complaint_general
+    name: Complaint (General Civil)
+    category: pleading
+    document_type: complaint
+    court_types: [CP]
+    matter_types: [civil]
+    is_pro_se_friendly: true
+    description: General civil complaint initiating lawsuit
+    auto_populate_rules:
+      plaintiff_name: "{{client_name}}"
+      plaintiff_address: "{{client_address}}"
+      defendant_name: "{{opposing_party}}"
+    variable_schema:
+      - name: jurisdiction_basis
+        type: select
+        options: [amount_in_controversy, federal_question, diversity]
+        required: true
+      - name: factual_allegations
+        type: textarea
+        required: true
+      - name: claims_for_relief
+        type: textarea
+        required: true
+      - name: damages_sought
+        type: text
+        required: true
+    content: |
+      IN THE COURT OF COMMON PLEAS OF {{county}} COUNTY, PENNSYLVANIA
+      CIVIL ACTION
+
+      {{plaintiff_name}},
+        Plaintiff
+
+      v.
+
+      {{defendant_name}},
+        Defendant
+
+      No. {{docket_number}}
+
+      COMPLAINT
+
+      Plaintiff {{plaintiff_name}}, by and through undersigned counsel, files this Complaint against Defendant {{defendant_name}}, and in support thereof, avers as follows:
+
+      JURISDICTION AND VENUE
+
+      1. This Court has jurisdiction over this matter pursuant to {{jurisdiction_basis}}.
+
+      2. Venue is proper in {{county}} County, Pennsylvania.
+
+      PARTIES
+
+      3. Plaintiff {{plaintiff_name}} is an individual residing at {{plaintiff_address}}.
+
+      4. Defendant {{defendant_name}} is {{defendant_description}}.
+
+      FACTUAL ALLEGATIONS
+
+      {{factual_allegations}}
+
+      CLAIMS FOR RELIEF
+
+      {{claims_for_relief}}
+
+      DAMAGES
+
+      WHEREFORE, Plaintiff demands judgment against Defendant in the amount of {{damages_sought}}, together with costs, interest, and such other relief as this Court deems just and proper.
+
+      Respectfully submitted,
+
+      {{attorney_signature}}
+
+  - id: answer_general
+    name: Answer to Complaint
+    category: pleading
+    document_type: answer
+    court_types: [CP]
+    matter_types: [civil]
+    is_pro_se_friendly: true
+    description: Answer and New Matter to civil complaint
+    content: |
+      # Answer template...
+
+  # ============================================================================
+  # BRIEFS & MEMORANDA
+  # ============================================================================
+
+  - id: brief_opposition
+    name: Brief in Opposition
+    category: brief
+    document_type: brief
+    court_types: [CP, APP]
+    matter_types: [all]
+    is_pro_se_friendly: false
+    description: Brief opposing motion or petition
+    content: |
+      # Brief in Opposition template...
+
+  - id: memorandum_law
+    name: Memorandum of Law
+    category: brief
+    document_type: memorandum
+    court_types: [CP, APP]
+    matter_types: [all]
+    is_pro_se_friendly: false
+    description: Legal memorandum supporting position
+    content: |
+      # Memorandum of Law template...
+
+  # ============================================================================
+  # DISCOVERY
+  # ============================================================================
+
+  - id: interrogatories
+    name: Interrogatories
+    category: discovery
+    document_type: interrogatories
+    court_types: [CP]
+    matter_types: [civil, business]
+    is_pro_se_friendly: true
+    description: Written questions to opposing party
+    content: |
+      # Interrogatories template...
+
+  - id: request_production
+    name: Request for Production of Documents
+    category: discovery
+    document_type: request_for_production
+    court_types: [CP]
+    matter_types: [civil, business]
+    is_pro_se_friendly: true
+    description: Request for documents and tangible things
+    content: |
+      # Request for Production template...
+
+  - id: request_admissions
+    name: Request for Admissions
+    category: discovery
+    document_type: request_for_admissions
+    court_types: [CP]
+    matter_types: [civil]
+    is_pro_se_friendly: true
+    description: Request to admit facts and authenticity of documents
+    content: |
+      # Request for Admissions template...
+
+  # ============================================================================
+  # AFFIDAVITS & DECLARATIONS
+  # ============================================================================
+
+  - id: affidavit_support
+    name: Affidavit in Support
+    category: affidavit
+    document_type: affidavit
+    court_types: [all]
+    matter_types: [all]
+    is_pro_se_friendly: true
+    description: Sworn statement supporting motion or claim
+    content: |
+      AFFIDAVIT OF {{affiant_name}}
+
+      I, {{affiant_name}}, being duly sworn according to law, depose and state as follows:
+
+      1. I am over the age of eighteen (18) years and competent to make this Affidavit.
+
+      2. {{affidavit_statements}}
+
+      I verify that the statements made in this Affidavit are true and correct to the best of my knowledge, information, and belief. I understand that false statements herein are made subject to the penalties of 18 Pa.C.S. § 4904 relating to unsworn falsification to authorities.
+
+      Date: {{current_date}}
+
+      _________________________________
+      {{affiant_name}}
+
+      Sworn to and subscribed before me
+      this ____ day of __________, 20__
+
+      _________________________________
+      Notary Public
+
+  # ============================================================================
+  # CRIMINAL DOCUMENTS
+  # ============================================================================
+
+  - id: motion_suppress
+    name: Motion to Suppress Evidence
+    category: motion
+    document_type: motion
+    court_types: [CP, MDJ]
+    matter_types: [criminal]
+    is_pro_se_friendly: false
+    description: Motion to suppress illegally obtained evidence
+    content: |
+      # Motion to Suppress template...
+
+  - id: motion_dismiss_criminal
+    name: Motion to Dismiss (Criminal)
+    category: motion
+    document_type: motion
+    court_types: [CP, MDJ]
+    matter_types: [criminal]
+    is_pro_se_friendly: false
+    description: Motion to dismiss criminal charges
+    content: |
+      # Motion to Dismiss (Criminal) template...
+
+  # ============================================================================
+  # FAMILY LAW
+  # ============================================================================
+
+  - id: petition_divorce
+    name: Petition for Divorce
+    category: petition
+    document_type: petition
+    court_types: [CP]
+    matter_types: [family]
+    is_pro_se_friendly: true
+    description: Petition to initiate divorce proceedings
+    content: |
+      # Divorce Petition template...
+
+  - id: petition_custody
+    name: Petition for Custody
+    category: petition
+    document_type: petition
+    court_types: [CP]
+    matter_types: [family]
+    is_pro_se_friendly: true
+    description: Petition for child custody determination
+    content: |
+      # Custody Petition template...
+
+  - id: petition_pfa
+    name: Petition for Protection From Abuse
+    category: petition
+    document_type: petition
+    court_types: [CP, MDJ]
+    matter_types: [family]
+    is_pro_se_friendly: true
+    description: Petition for PFA order
+    content: |
+      # PFA Petition template...
+
+  # ============================================================================
+  # APPELLATE
+  # ============================================================================
+
+  - id: notice_appeal
+    name: Notice of Appeal
+    category: appellate
+    document_type: notice
+    court_types: [APP]
+    matter_types: [all]
+    is_pro_se_friendly: true
+    description: Notice of appeal to appellate court
+    content: |
+      # Notice of Appeal template...
+
+  - id: appellate_brief
+    name: Appellate Brief
+    category: appellate
+    document_type: brief
+    court_types: [APP]
+    matter_types: [all]
+    is_pro_se_friendly: false
+    description: Brief for appellate court
+    content: |
+      # Appellate Brief template...
+
+  # ============================================================================
+  # ADMINISTRATIVE
+  # ============================================================================
+
+  - id: notice_appearance
+    name: Notice of Appearance
+    category: administrative
+    document_type: notice_of_appearance
+    court_types: [all]
+    matter_types: [all]
+    is_pro_se_friendly: true
+    description: Notice of attorney appearance
+    content: |
+      # Notice of Appearance template...
+
+  - id: certificate_service
+    name: Certificate of Service
+    category: administrative
+    document_type: certificate_of_service
+    court_types: [all]
+    matter_types: [all]
+    is_pro_se_friendly: true
+    description: Certificate of service of documents
+    content: |
+      CERTIFICATE OF SERVICE
+
+      I hereby certify that on {{service_date}}, I served a true and correct copy of the foregoing {{document_name}} upon the following parties by {{service_method}}:
+
+      {{parties_served}}
+
+      Date: {{current_date}}
+
+      _________________________________
+      {{attorney_name}}
+      {{attorney_id}}
+
+  # ============================================================================
+  # TABLE OF AUTHORITIES
+  # ============================================================================
+
+  - id: table_authorities
+    name: Table of Authorities
+    category: administrative
+    document_type: table_of_authorities
+    court_types: [CP, APP]
+    matter_types: [all]
+    is_pro_se_friendly: false
+    description: Auto-generated table of authorities
+    content: |
+      TABLE OF AUTHORITIES
+
+      Cases:
+      {{case_citations}}
+
+      Statutes:
+      {{statute_citations}}
+
+      Rules:
+      {{rule_citations}}
+
+      Other Authorities:
+      {{other_citations}}

@@ -17,7 +17,7 @@ import {
   Building
 } from 'lucide-react';
 import { Docket, Party, Event, Filing, Financial, Attachment, Charge } from '../types/domain';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 
 type TabType = 'overview' | 'parties' | 'charges' | 'events' | 'filings' | 'financials' | 'attachments';
 
@@ -256,7 +256,7 @@ const OverviewTab: React.FC<{ docket: Docket }> = ({ docket }) => (
           </div>
           <div>
             <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
-            <dd className="text-sm text-gray-900">{new Date(docket.lastUpdated).toLocaleString()}</dd>
+            <dd className="text-sm text-gray-900">{docket.lastUpdated ? new Date(docket.lastUpdated).toLocaleString() : 'Unknown'}</dd>
           </div>
           <div>
             <dt className="text-sm font-medium text-gray-500">Source</dt>
@@ -546,55 +546,67 @@ const FinancialsTab: React.FC<{ financials: Financial[] }> = ({ financials }) =>
 
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Amount Assessed</dt>
-                    <dd className="text-sm text-gray-900 font-medium">
-                      ${financial.amount_assessed.toFixed(2)}
-                    </dd>
+                    <dl>
+                      <dt className="text-sm font-medium text-gray-500">Amount Assessed</dt>
+                      <dd className="text-sm text-gray-900 font-medium">
+                        ${financial.amount_assessed.toFixed(2)}
+                      </dd>
+                    </dl>
                   </div>
 
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Amount Paid</dt>
-                    <dd className="text-sm text-gray-900 font-medium">
-                      ${financial.amount_paid.toFixed(2)}
-                    </dd>
+                    <dl>
+                      <dt className="text-sm font-medium text-gray-500">Amount Paid</dt>
+                      <dd className="text-sm text-gray-900 font-medium">
+                        ${financial.amount_paid.toFixed(2)}
+                      </dd>
+                    </dl>
                   </div>
 
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Balance Due</dt>
-                    <dd className={`text-sm font-medium ${
-                      financial.balance_due > 0 ? 'text-red-600' : 'text-green-600'
-                    }`}>
-                      ${financial.balance_due.toFixed(2)}
-                    </dd>
+                    <dl>
+                      <dt className="text-sm font-medium text-gray-500">Balance Due</dt>
+                      <dd className={`text-sm font-medium ${
+                        financial.balance_due > 0 ? 'text-red-600' : 'text-green-600'
+                      }`}>
+                        ${financial.balance_due.toFixed(2)}
+                      </dd>
+                    </dl>
                   </div>
 
                   {financial.dueDate && (
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Due Date</dt>
-                      <dd className="text-sm text-gray-900">
-                        {new Date(financial.dueDate).toLocaleDateString()}
-                      </dd>
+                      <dl>
+                        <dt className="text-sm font-medium text-gray-500">Due Date</dt>
+                        <dd className="text-sm text-gray-900">
+                          {new Date(financial.dueDate).toLocaleDateString()}
+                        </dd>
+                      </dl>
                     </div>
                   )}
 
                   {financial.payment_plan && (
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Payment Plan</dt>
-                      <dd className="text-sm text-gray-900">Yes</dd>
+                      <dl>
+                        <dt className="text-sm font-medium text-gray-500">Payment Plan</dt>
+                        <dd className="text-sm text-gray-900">Yes</dd>
+                      </dl>
                     </div>
                   )}
 
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Status</dt>
-                    <dd className="text-sm text-gray-900">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        financial.balance_due === 0 ? 'bg-green-100 text-green-800' :
-                        financial.balance_due > 0 ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {financial.balance_due === 0 ? 'Paid' : 'Outstanding'}
-                      </span>
-                    </dd>
+                    <dl>
+                      <dt className="text-sm font-medium text-gray-500">Status</dt>
+                      <dd className="text-sm text-gray-900">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          financial.balance_due === 0 ? 'bg-green-100 text-green-800' :
+                          financial.balance_due > 0 ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {financial.balance_due === 0 ? 'Paid' : 'Outstanding'}
+                        </span>
+                      </dd>
+                    </dl>
                   </div>
                 </div>
               </div>

@@ -34,17 +34,18 @@
       "menuOnLeftClick": false
     }
   },
-  "updater": {
-    "active": true,
-    "endpoints": [
-      "https://github.com/quartzxmoon/drafter/releases/latest/download/release.json"
-    ],
-    "dialog": true,
-    "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhEQzY4M0Y5RkY4NjUzNzMKUldSVGJHVnVkR2x1WlhOcGJuZGxjblJsY25SbGNuUmxjblJsY25SbGNuUmxjblJsY25SbGNuUmwK"
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDMxNDdCMTlBNERCN0Q0OUYKUldTZjFMZE5tckZITVJtOFhPc1ZSdmdwVDJVM2xXeTd1YUFZUDVWTkNaVE1RMm1zSWhCOHdhSTAK",
+      "endpoints": [
+        "https://github.com/quartzxmoon/drafter/releases/latest/download/release.json"
+      ]
+    }
   },
   "bundle": {
     "active": true,
     "targets": "all",
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -52,7 +53,6 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "identifier": "com.paedocket.desktop",
     "publisher": "PA eDocket Desktop Team",
     "copyright": "Copyright © 2024 PA eDocket Desktop Team. All rights reserved.",
     "category": "Productivity",
@@ -63,12 +63,14 @@
       "config/*",
       "templates/*"
     ],
-    "deb": {
-      "depends": [
-        "libwebkit2gtk-4.0-37",
-        "libappindicator3-1"
-      ],
-      "section": "Office"
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.0-37",
+          "libappindicator3-1"
+        ],
+        "section": "Office"
+      }
     },
     "macOS": {
       "frameworks": [],
@@ -82,37 +84,8 @@
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
       "timestampUrl": "",
-      "tsp": false,
-      "wix": {
-        "language": "en-US",
-        "template": null,
-        "fragmentPaths": [],
-        "componentGroupRefs": [],
-        "componentRefs": [],
-        "featureGroupRefs": [],
-        "featureRefs": [],
-        "mergeRefs": [],
-        "skipWebviewInstall": false,
-        "license": null,
-        "enableElevatedUpdateTask": true,
-        "bannerPath": null,
-        "dialogImagePath": null
-      },
-      "nsis": {
-        "template": null,
-        "languages": ["English"],
-        "customLanguageFiles": {},
-        "displayLanguageSelector": false,
-        "installerIcon": null,
-        "installMode": "currentUser",
-        "allowDowngrades": false,
-        "deleteAppDataOnUninstall": false,
-        "startMenuFolder": "PA eDocket Desktop",
-        "headerImage": null,
-        "sidebarImage": null,
-        "installerHooks": null,
-        "compressionLevel": "high"
-      }
+      "wix": null,
+      "nsis": null
     }
   }
 }

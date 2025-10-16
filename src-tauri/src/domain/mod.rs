@@ -1,6 +1,8 @@
 // Core domain models for PA eDocket Desktop
 // Production-ready Rust structs with serde serialization
 
+pub mod case_management;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
